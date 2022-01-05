@@ -1,0 +1,68 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  padding: 2vmin;
+  height: 100vh;
+  background-color: black;
+}
+
+#frame {
+  overflow: hidden;
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  position: relative;
+}
+
+/*  */
+
+#player {
+  width: 32px;
+  height: 16px;
+  background-color: dodgerblue;
+  position: absolute;
+  grid-row: 2 / 3;
+  align-self: end;
+  display: grid;
+  place-items: center;
+  transition: all .1s;
+  z-index: 1;
+}
+
+#player::before {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  bottom: 100%;
+  background-color: dodgerblue;
+}
+
+.bullet {
+  width: 8px;
+  height: 8px;
+  background-color: orange;
+  transition: transform 1s linear;
+  position: absolute;
+  bottom: 0;
+  margin-left: 12px;
+  border-radius: 100%;
+}
+
+.obstacle {
+  position: absolute;
+  top: -32px;
+  width: 32px;
+  height: 32px;
+  background-color: crimson;
+  transition: all 1s;
+}
+
+.collide {
+  /* background-color: black !important; */
+  display: none !important;
+}
