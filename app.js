@@ -75,17 +75,18 @@ function initGame() {
 
 initGame();
 
-function spawnObstacle() {}
-{
+function spawnObstacle() {
   const o = document.createElement("DIV");
   o.classList.add("obstacle");
   o.dataset.transY = 0;
   o.style.left = `${getRandom(0, window.innerWidth - 64)}px`;
   frame.appendChild(o);
 }
+
+
 setInterval(() => {
   spawnObstacle();
-}, 1000);
+}, 2000);
 
 setInterval(() => {
   document.querySelectorAll(".obstacle").forEach((o) => {
@@ -93,8 +94,5 @@ setInterval(() => {
     currTrans += 8;
     o.dataset.transY = currTrans;
     o.style.transform = `translateY(${currTrans}px)`;
-    if (currTrans > 1000) {
-      o.remove();
-    }
   });
 }, 100);
