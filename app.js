@@ -28,8 +28,6 @@ let playerX = 0;
 setInterval(() => {
   let bullets = document.querySelectorAll(".bullet");
   bullets.forEach((bullet) => {
-    console.log(bullets.length);
-
     document.querySelectorAll(".obstacle").forEach((obstacle) => {
       detectCollision(bullet, obstacle);
     });
@@ -77,20 +75,26 @@ function initGame() {
 
 initGame();
 
-setInterval(() => {
+function spawnObstacle() {}
+{
   const o = document.createElement("DIV");
   o.classList.add("obstacle");
   o.dataset.transY = 0;
   o.style.left = `${getRandom(0, window.innerWidth - 64)}px`;
   frame.appendChild(o);
-}, 2000);
+}
+setInterval(() => {
+  spawnObstacle();
+}, 1000);
 
 setInterval(() => {
-  document.querySelectorAll('.obstacle').forEach(o => {
+  document.querySelectorAll(".obstacle").forEach((o) => {
     let currTrans = parseInt(o.dataset.transY);
     currTrans += 8;
     o.dataset.transY = currTrans;
-    console.log(currTrans + 8);
-    o.style.transform = `translate(${getRandom(-16, 16)}px, ${currTrans}px)`;
-  })
-}, 100)
+    o.style.transform = `translateY(${currTrans}px)`;
+    if (currTrans > 1000) {
+      o.remove();
+    }
+  });
+}, 100);
