@@ -25,6 +25,8 @@ function detectCollision(bullet, obs) {
 
     if (!bullet.classList.contains("mBeam")) {
       bullet.remove();
+    } else {
+      damageMultiplier = 0.75;
     }
 
     let currHP = Math.round(parseInt(obs.dataset.hp) - 10 * damageMultiplier);
@@ -40,9 +42,9 @@ function detectCollision(bullet, obs) {
 
 let playerX = 0;
 
-let damageMultiplier = 1;
+let damageMultiplier = 1.5;
 let currentGameSpeed = 3;
-let spawnRate = 2000;
+let spawnRate = 2500;
 
 setInterval(() => {
   let bullets = document.querySelectorAll(".bullet");
@@ -85,7 +87,7 @@ function fire(x) {
     }
   });
 
-  damageMultiplier = damageMultiplierInput.value || 1;
+  damageMultiplier = damageMultiplierInput.value || 1.5;
 
   bullet.classList.add("bullet");
   bullet.style.transform = x;
@@ -104,6 +106,7 @@ function fire(x) {
   }
 
   frame.appendChild(bullet);
+
   setTimeout(() => {
     if (bullet.classList.contains("mBeam")) {
       bullet.style.transform = x + " " + "translateY(-320px)";
@@ -142,16 +145,27 @@ function spawnObstacle() {
   const o = document.createElement("DIV");
   o.classList.add("obstacle");
   o.dataset.transY = 0;
+  o.dataset.speed = getRandom(0, 8);
   o.dataset.hp = getRandom(15, 150);
   o.innerText = o.dataset.hp;
-  o.style.left = `${getRandom(0, window.innerWidth - 64)}px`;
+  o.style.left = `${getRandom(0, 960 - 64)}px`;
+  o.style.width = o.dataset.hp / 2 + getRandom(16, 32) + "px";
   frame.appendChild(o);
+}
+
+function spawnBonus() {
+  const b = document.createElement("DIV");
+  b.classList.add("bonus");
+  b.dataset.transY = 0;
+  b.style.left = `${getRandom(0, 960 - 64)}px`;
+  frame.appendChild(b);
 }
 
 setInterval(() => {
   document.querySelectorAll(".obstacle").forEach((o) => {
     let currTrans = parseInt(o.dataset.transY);
-    currTrans += currentGameSpeed;
+    let obsSpeed = currentGameSpeed + parseInt(o.dataset.speed);
+    currTrans += obsSpeed;
     o.dataset.transY = currTrans;
     o.style.transform = `translateY(${currTrans}px)`;
 
@@ -160,18 +174,31 @@ setInterval(() => {
     }
   });
 
+  document.querySelectorAll(".bonus").forEach((b) => {
+    let currTrans = parseInt(b.dataset.transY);
+    currTrans += currentGameSpeed * 1.5;
+    b.dataset.transY = currTrans;
+    b.style.transform = `translateY(${currTrans}px)`;
+
+    if (b.getBoundingClientRect().top > window.innerHeight) {
+      b.remove();
+    }
+  });
+
   currentGameSpeed =
     parseInt(document.getElementById("gameSpeedInput").value) || 3;
-
-  currentBGPos -= 0.1;
-  frame.style.backgroundPositionY = currentBGPos + "%";
 }, 100);
 
 let currentBGPos = 100;
 
 setInterval(() => {
   spawnObstacle();
-  spawnRate = parseInt(document.getElementById("spawnRateInput").value) || 2000;
+
+  if (getRandom(0, 20) === 20) {
+    spawnBonus();
+  }
+
+  spawnRate = parseInt(document.getElementById("spawnRateInput").value) || 2500;
 }, spawnRate);
 
 // Keys
@@ -209,8 +236,6 @@ function move(direction) {
 }
 
 document.addEventListener("keyup", (e) => {
-  console.log("%capp.js line:186 e.code", "color: #007acc;", e.code);
-
   if (e.code === "Digit1") {
     mDouble.checked = !mDouble.checked;
   } else if (e.code === "Digit2") {
