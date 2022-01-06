@@ -49,28 +49,60 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-document.addEventListener("keyup", (e) => {
-  if (e.code === "Space") {
+let fireDelay = 0;
+let initialFireDelay = 10;
+
+setInterval(() => {
+  if (fireDelay > 0) {
+    fireDelay--;
+    console.log('%capp.js line:57 fireDelay', 'color: #007acc;', fireDelay);
+  }
+}, 100);
+
+document.addEventListener("keypress", (e) => {
+  if (e.code === "Space" && fireDelay === 0) {
     fire(player.style.transform);
+    fireDelay = initialFireDelay;
   }
 });
 
 function fire(x) {
-  console.log(x);
   const bullet = document.createElement("DIV");
-  bullet.classList.add("bullet");
+  const xVal = parseInt(x.split("(")[1].split("px")[0]);
+  console.log("%capp.js line:62 xVal", "color: #007acc;", xVal);
 
+  bullet.classList.add("bullet");
   bullet.style.transform = x;
+  // bullet.classList.add("mFluctuate");
+  // bullet.classList.add("mHuge");
+  bullet.classList.add("mSlow");
+  bullet.classList.add("mWave");
+
+  // bullet.classList.add("mDouble");
+
+  if (bullet.classList.contains("mDouble")) {
+    x = `translateX(${xVal - 64}px)`;
+    xR = `translateX(${xVal + 64}px)`;
+    const secondbullet = document.createElement("DIV");
+    secondbullet.classList = bullet.classList;
+    bullet.style.transform = `translateX(${xVal - 8}px)`;
+    secondbullet.style.transform = `translateX(${xVal + 8}px)`;
+    setTimeout(() => {
+      secondbullet.style.transform = xR + " " + "translateY(-999px)";
+    }, 10);
+    frame.appendChild(secondbullet);
+  }
+
   frame.appendChild(bullet);
   setTimeout(() => {
     bullet.style.transform = x + " " + "translateY(-999px)";
   }, 10);
-  console.log(bullet.style.transform);
 }
 
 function initGame() {
   playerX = window.innerWidth / 2;
   player.style.transform = `translateX(${playerX}px)`;
+  spawnObstacle();
 }
 
 initGame();
@@ -83,10 +115,9 @@ function spawnObstacle() {
   frame.appendChild(o);
 }
 
-
 setInterval(() => {
   spawnObstacle();
-}, 2000);
+}, 1000);
 
 setInterval(() => {
   document.querySelectorAll(".obstacle").forEach((o) => {
@@ -94,5 +125,9 @@ setInterval(() => {
     currTrans += 8;
     o.dataset.transY = currTrans;
     o.style.transform = `translateY(${currTrans}px)`;
+
+    if (o.getBoundingClientRect().top > window.innerHeight) {
+      o.remove();
+    }
   });
 }, 100);

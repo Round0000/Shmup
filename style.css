@@ -29,12 +29,12 @@ body {
   align-self: end;
   display: grid;
   place-items: center;
-  transition: all .1s;
+  transition: all 0.1s;
   z-index: 1;
 }
 
 #player::before {
-  content: '';
+  content: "";
   position: absolute;
   width: 8px;
   height: 8px;
@@ -43,9 +43,9 @@ body {
 }
 
 .bullet {
+  background-color: orange;
   width: 8px;
   height: 8px;
-  background-color: orange;
   transition: transform 1s linear;
   position: absolute;
   bottom: 0;
@@ -55,7 +55,7 @@ body {
 
 .obstacle {
   position: absolute;
-  top: -32px;
+  top: -64px;
   width: 32px;
   height: 32px;
   background-color: crimson;
@@ -63,6 +63,52 @@ body {
 }
 
 .collide {
-  /* background-color: black !important; */
   display: none !important;
+}
+
+/* Bullet modifiers */
+
+.bullet.mHuge {
+  width: 64px;
+  height: 258px;
+  margin: 0;
+}
+
+.bullet.mFluctuate {
+  animation-duration: 0.4s;
+  animation-name: mFluctuate;
+  animation-iteration-count: infinite;
+}
+
+@keyframes mFluctuate {
+  0% {
+    width: 1px;
+    height: 1px;
+  }
+  50% {
+    width: 64px;
+    height: 64px;
+    margin: -12px;
+  }
+}
+
+.bullet.mSlow {
+  transition-duration: 6s;
+}
+
+.bullet.mWave {
+  animation: mWave infinite .1s;
+}
+
+@keyframes mWave {
+  from {
+    height: 6px;
+  }
+  to {
+    width: 64px;
+    height: 0px;
+    margin-left: -16px;
+    border-radius: 6px;
+  }
+  
 }
