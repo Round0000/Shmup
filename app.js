@@ -132,7 +132,7 @@ function spawnObstacle() {
   const o = document.createElement("DIV");
   o.classList.add("obstacle");
   o.dataset.transY = 0;
-  o.dataset.hp = 100;
+  o.dataset.hp = getRandom(50, 100);
   o.innerText = o.dataset.hp;
   o.style.left = `${getRandom(0, window.innerWidth - 64)}px`;
   frame.appendChild(o);
