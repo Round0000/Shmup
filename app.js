@@ -6,9 +6,9 @@ function getRandom(min, max) {
 
 const player = document.getElementById("player");
 
-function detectCollision(object1, object2) {
-  let obj1 = object1.getBoundingClientRect();
-  let obj2 = object2.getBoundingClientRect();
+function detectCollision(bullet, obs) {
+  let obj1 = bullet.getBoundingClientRect();
+  let obj2 = obs.getBoundingClientRect();
 
   if (
     obj1.left < obj2.left + obj2.width &&
@@ -16,14 +16,30 @@ function detectCollision(object1, object2) {
     obj1.top < obj2.top + obj2.height &&
     obj1.top + obj1.height > obj2.top
   ) {
-    object2.classList.add("collide");
-    console.log("COLLISION !!", document.querySelectorAll(".bullet").length);
-    object2.remove();
-    object1.remove();
+    obs.classList.add("damaged");
+    setTimeout(() => {
+      obs.classList.remove("damaged");
+    }, 300)
+
+    console.log("COLLISION !!");
+
+    bullet.remove();
+
+    let currHP = Math.round(parseInt(obs.dataset.hp) - 10 * damageMultiplier);
+
+    if (currHP < 1) {
+      obs.remove();
+      console.log("%capp.js line:29 currHP", "color: #007acc;", currHP);
+    } else {
+      obs.dataset.hp = currHP;
+      obs.innerText = currHP;
+    }
   }
 }
 
 let playerX = 0;
+
+let damageMultiplier = 1;
 
 setInterval(() => {
   let bullets = document.querySelectorAll(".bullet");
@@ -38,35 +54,38 @@ setInterval(() => {
   });
 }, 5);
 
-document.addEventListener("keydown", (e) => {
-  if (e.code === "ArrowLeft") {
-    playerX -= 16;
-    player.style.transform = `translateX(${playerX}px)`;
-  }
-  if (e.code === "ArrowRight") {
-    playerX += 16;
-    player.style.transform = `translateX(${playerX}px)`;
-  }
-});
+// document.addEventListener("keydown", (e) => {
+//   if (e.code === "ArrowLeft") {
+//     playerX -= 16;
+//     player.style.transform = `translateX(${playerX}px)`;
+//   }
+//   if (e.code === "ArrowRight") {
+//     playerX += 16;
+//     player.style.transform = `translateX(${playerX}px)`;
+//   }
+// });
 
 let fireDelay = 0;
-let initialFireDelay = 10;
+let initialFireDelay = 4;
 
 setInterval(() => {
   if (fireDelay > 0) {
     fireDelay--;
-    console.log('%capp.js line:57 fireDelay', 'color: #007acc;', fireDelay);
+  } else if (fireDelay === 0 && keymap[32]) {
+    fire(player.style.transform);
   }
 }, 100);
 
-document.addEventListener("keypress", (e) => {
-  if (e.code === "Space" && fireDelay === 0) {
-    fire(player.style.transform);
-    fireDelay = initialFireDelay;
-  }
-});
+// document.addEventListener("keypress", (e) => {
+//   if (e.code === "Space" && fireDelay === 0) {
+//     fire(player.style.transform);
+//     fireDelay = initialFireDelay;
+//   }
+// });
 
 function fire(x) {
+  fireDelay = initialFireDelay;
+
   const bullet = document.createElement("DIV");
   const xVal = parseInt(x.split("(")[1].split("px")[0]);
   console.log("%capp.js line:62 xVal", "color: #007acc;", xVal);
@@ -75,10 +94,10 @@ function fire(x) {
   bullet.style.transform = x;
   // bullet.classList.add("mFluctuate");
   // bullet.classList.add("mHuge");
-  bullet.classList.add("mSlow");
-  bullet.classList.add("mWave");
+  // bullet.classList.add("mSlow");
+  // bullet.classList.add("mWave");
 
-  // bullet.classList.add("mDouble");
+  bullet.classList.add("mDouble");
 
   if (bullet.classList.contains("mDouble")) {
     x = `translateX(${xVal - 64}px)`;
@@ -108,16 +127,20 @@ function initGame() {
 initGame();
 
 function spawnObstacle() {
+
+
   const o = document.createElement("DIV");
   o.classList.add("obstacle");
   o.dataset.transY = 0;
+  o.dataset.hp = 100;
+  o.innerText = o.dataset.hp;
   o.style.left = `${getRandom(0, window.innerWidth - 64)}px`;
   frame.appendChild(o);
 }
 
 setInterval(() => {
   spawnObstacle();
-}, 1000);
+}, 1500);
 
 setInterval(() => {
   document.querySelectorAll(".obstacle").forEach((o) => {
@@ -131,3 +154,37 @@ setInterval(() => {
     }
   });
 }, 100);
+
+// Keys
+let keymap = {}; // You could also use an array
+onkeydown = onkeyup = function (e) {
+  keymap[e.keyCode] = e.type == "keydown";
+
+  if (keymap[32]) {
+    if (keymap[37]) {
+      move("l");
+    } else if (keymap[39]) {
+      move("r");
+    }
+  } else if (keymap[37]) {
+    move("l");
+  } else if (keymap[39]) {
+    move("r");
+  }
+};
+
+function move(direction) {
+  if (direction === "l") {
+    playerX -= 16;
+    if (playerX < 0) {
+      playerX = 0;
+    }
+    player.style.transform = `translateX(${playerX}px)`;
+  } else if (direction === "r") {
+    playerX += 16;
+    if (playerX > frame.getBoundingClientRect().width - 32) {
+      playerX = frame.getBoundingClientRect().width - 32;
+    }
+    player.style.transform = `translateX(${playerX}px)`;
+  }
+}

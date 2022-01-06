@@ -8,6 +8,7 @@ body {
   padding: 2vmin;
   height: 100vh;
   background-color: black;
+  font-family: sans-serif;
 }
 
 #frame {
@@ -58,11 +59,21 @@ body {
   top: -64px;
   width: 32px;
   height: 32px;
-  background-color: crimson;
+  background-color:  snow;
   transition: all 1s;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  border: 6px solid transparent;
+  color: #222;
 }
 
-.collide {
+.obstacle.damaged {
+  border-color: crimson;
+}
+
+.obstacle.destroyed {
   display: none !important;
 }
 
