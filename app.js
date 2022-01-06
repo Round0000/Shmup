@@ -96,8 +96,10 @@ function fire(x) {
   // bullet.classList.add("mHuge");
   // bullet.classList.add("mSlow");
   // bullet.classList.add("mWave");
+  bullet.classList.add("mBeam");
 
   bullet.classList.add("mDouble");
+  
 
   if (bullet.classList.contains("mDouble")) {
     x = `translateX(${xVal - 64}px)`;
