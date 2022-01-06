@@ -40,7 +40,7 @@ function detectCollision(bullet, obs) {
 let playerX = 0;
 
 let damageMultiplier = 1;
-
+let currentGameSpeed = 3;
 let spawnRate = 2000;
 
 setInterval(() => {
@@ -68,8 +68,8 @@ setInterval(() => {
 }, 100);
 
 function fire(x) {
-  fireDelay = document.getElementById('fireDelayInput').value || initialFireDelay;
-
+  fireDelay =
+    document.getElementById("fireDelayInput").value || initialFireDelay;
 
   const bullet = document.createElement("DIV");
   const xVal = parseInt(x.split("(")[1].split("px")[0]);
@@ -88,8 +88,6 @@ function fire(x) {
 
   bullet.classList.add("bullet");
   bullet.style.transform = x;
-
-
 
   if (bullet.classList.contains("mDouble")) {
     x = `translateX(${xVal - 64}px)`;
@@ -128,12 +126,10 @@ function spawnObstacle() {
   frame.appendChild(o);
 }
 
-
-
 setInterval(() => {
   document.querySelectorAll(".obstacle").forEach((o) => {
     let currTrans = parseInt(o.dataset.transY);
-    currTrans += 8;
+    currTrans += currentGameSpeed;
     o.dataset.transY = currTrans;
     o.style.transform = `translateY(${currTrans}px)`;
 
@@ -142,13 +138,13 @@ setInterval(() => {
     }
   });
 
-  spawnRate = parseInt(document.getElementById('spawnRateInput').value) || 2000;
-
+  currentGameSpeed =
+    parseInt(document.getElementById("gameSpeedInput").value) || 3;
 }, 100);
 
 setInterval(() => {
   spawnObstacle();
-  console.log(spawnRate);
+  spawnRate = parseInt(document.getElementById("spawnRateInput").value) || 2000;
 }, spawnRate);
 
 // Keys
@@ -184,3 +180,19 @@ function move(direction) {
     player.style.transform = `translateX(${playerX}px)`;
   }
 }
+
+document.addEventListener("keyup", (e) => {
+  console.log("%capp.js line:186 e.code", "color: #007acc;", e.code);
+
+  if (e.code === "Digit1") {
+    mDouble.checked = !mDouble.checked;
+  } else if (e.code === "Digit2") {
+    mSlow.checked = !mSlow.checked;
+  } else if (e.code === "Digit3") {
+    mWave.checked = !mWave.checked;
+  } else if (e.code === "Digit4") {
+    mHuge.checked = !mHuge.checked;
+  } else if (e.code === "Digit5") {
+    mFluctuate.checked = !mFluctuate.checked;
+  }
+});

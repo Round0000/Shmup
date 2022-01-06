@@ -23,7 +23,7 @@ body {
 
 #player {
   width: 32px;
-  height: 16px;
+  height: 32px;
   background-color: dodgerblue;
   position: absolute;
   grid-row: 2 / 3;
@@ -35,13 +35,15 @@ body {
 }
 
 #player::before {
-  content: "";
   position: absolute;
-  width: 8px;
-  height: 8px;
-  bottom: 100%;
-  background-color: dodgerblue;
+  content: '';
+  width: 25%;
+  height: 25%;
+  background-color: #0008;
+  transform: rotate(45deg);
 }
+
+
 
 .bullet {
   background-color: orange;
@@ -71,7 +73,8 @@ body {
 }
 
 .obstacle.damaged {
-  border-color: crimson;
+  background-color: orangered;
+  margin-top: -32px;
 }
 
 .obstacle.destroyed {
@@ -81,14 +84,14 @@ body {
 .bulletEffects {
   background-color: #111;
   display: flex;
-  gap: 2em;
+  gap: 1em;
   padding: .5em;
   color: #fff;
 }
 
 .bulletEffects label {
   display: flex;
-  gap: .5em;
+  gap: .25em;
   border: 1px solid white;
   align-items: center;
   padding: .25em;
