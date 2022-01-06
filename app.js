@@ -19,7 +19,7 @@ function detectCollision(bullet, obs) {
     obs.classList.add("damaged");
     setTimeout(() => {
       obs.classList.remove("damaged");
-    }, 300)
+    }, 300);
 
     console.log("COLLISION !!");
 
@@ -54,17 +54,6 @@ setInterval(() => {
   });
 }, 5);
 
-// document.addEventListener("keydown", (e) => {
-//   if (e.code === "ArrowLeft") {
-//     playerX -= 16;
-//     player.style.transform = `translateX(${playerX}px)`;
-//   }
-//   if (e.code === "ArrowRight") {
-//     playerX += 16;
-//     player.style.transform = `translateX(${playerX}px)`;
-//   }
-// });
-
 let fireDelay = 0;
 let initialFireDelay = 4;
 
@@ -76,30 +65,26 @@ setInterval(() => {
   }
 }, 100);
 
-// document.addEventListener("keypress", (e) => {
-//   if (e.code === "Space" && fireDelay === 0) {
-//     fire(player.style.transform);
-//     fireDelay = initialFireDelay;
-//   }
-// });
-
 function fire(x) {
   fireDelay = initialFireDelay;
 
   const bullet = document.createElement("DIV");
   const xVal = parseInt(x.split("(")[1].split("px")[0]);
-  console.log("%capp.js line:62 xVal", "color: #007acc;", xVal);
+
+  const effects = document.querySelectorAll(".bulletEffects input");
+
+  effects.forEach((eff) => {
+    if (eff.checked === true) {
+      bullet.classList.add(eff.id);
+    } else {
+      bullet.classList.remove(eff.id);
+    }
+  });
 
   bullet.classList.add("bullet");
   bullet.style.transform = x;
-  // bullet.classList.add("mFluctuate");
-  // bullet.classList.add("mHuge");
-  // bullet.classList.add("mSlow");
-  // bullet.classList.add("mWave");
-  bullet.classList.add("mBeam");
 
-  bullet.classList.add("mDouble");
-  
+
 
   if (bullet.classList.contains("mDouble")) {
     x = `translateX(${xVal - 64}px)`;
@@ -129,8 +114,6 @@ function initGame() {
 initGame();
 
 function spawnObstacle() {
-
-
   const o = document.createElement("DIV");
   o.classList.add("obstacle");
   o.dataset.transY = 0;
