@@ -23,13 +23,14 @@ function detectCollision(bullet, obs) {
 
     console.log("COLLISION !!");
 
-    bullet.remove();
+    if (!bullet.classList.contains("mBeam")) {
+      bullet.remove();
+    }
 
     let currHP = Math.round(parseInt(obs.dataset.hp) - 10 * damageMultiplier);
 
     if (currHP < 1) {
       obs.remove();
-      console.log("%capp.js line:29 currHP", "color: #007acc;", currHP);
     } else {
       obs.dataset.hp = currHP;
       obs.innerText = currHP;
@@ -104,7 +105,23 @@ function fire(x) {
 
   frame.appendChild(bullet);
   setTimeout(() => {
-    bullet.style.transform = x + " " + "translateY(-999px)";
+    if (bullet.classList.contains("mBeam")) {
+      bullet.style.transform = x + " " + "translateY(-320px)";
+      
+      setTimeout(() => {
+        bullet.remove();
+        fireDelay = 20;
+
+        if (keymap[32]) {
+          player.classList.add('chargingBeam');
+          setTimeout(() => {
+            player.classList.remove('chargingBeam');
+          }, 2000)
+        }
+      }, 400);
+    } else {
+      bullet.style.transform = x + " " + "translateY(-999px)";
+    }
   }, 10);
 }
 
