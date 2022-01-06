@@ -7,16 +7,23 @@
 body {
   padding: 2vmin;
   height: 100vh;
-  background-color: black;
+  background-color: #111;
   font-family: sans-serif;
 }
 
 #frame {
   overflow: hidden;
-  height: 85%;
+  height: 640px;
   display: grid;
   grid-template-rows: auto 1fr;
   position: relative;
+  width: 960px;
+  margin: auto;
+  background-color: black;
+  border: 2px solid white !important;
+  background: url("https://i.pinimg.com/originals/bb/df/c2/bbdfc21caaeddb9cbc9c57abd4013112.png") no-repeat center/cover;
+  background-position-y: 100%;
+  transition: all .2s;
 }
 
 /*  */
@@ -36,7 +43,7 @@ body {
 
 #player::before {
   position: absolute;
-  content: '';
+  content: "";
   width: 25%;
   height: 25%;
   background-color: #0008;
@@ -44,16 +51,17 @@ body {
 }
 
 #player.chargingBeam {
-  animation: chargingBeam 2.2s;
+  background-color: rgba(157, 255, 0, 0.7);
+  height: 16px;
+  transition: background-color 2s, height 2s;
 }
 
 @keyframes chargingBeam {
   100% {
-    background-color: red;
+    background-color: rgba(157, 255, 0, 0.7);
     height: 22px;
   }
 }
-
 
 .bullet {
   background-color: orange;
@@ -64,6 +72,7 @@ body {
   bottom: 0;
   margin-left: 12px;
   border-radius: 100%;
+  border: 2px solid white;
 }
 
 .obstacle {
@@ -71,7 +80,7 @@ body {
   top: -64px;
   width: 32px;
   height: 32px;
-  background-color:  snow;
+  background-color: snow;
   transition: all 1s;
   display: flex;
   justify-content: center;
@@ -79,12 +88,12 @@ body {
   align-items: center;
   border: 4px solid transparent;
   color: #222;
-  font-size: .9rem;
+  font-size: 0.9rem;
 }
 
 .obstacle.damaged {
   background-color: orangered;
-  margin-top: -32px;
+  margin-top: -16px;
 }
 
 .obstacle.destroyed {
@@ -96,16 +105,18 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 1em;
-  padding: .5em;
+  padding: 0.5em;
   color: #fff;
+  justify-content: center;
+
 }
 
 .bulletEffects label {
   display: flex;
-  gap: .25em;
+  gap: 0.25em;
   border: 1px solid white;
   align-items: center;
-  padding: .25em;
+  padding: 0.25em;
 }
 
 /* Bullet modifiers */
@@ -139,7 +150,7 @@ body {
 }
 
 .bullet.mWave {
-  animation: mWave infinite .1s;
+  animation: mWave infinite 0.1s;
 }
 
 @keyframes mWave {
@@ -152,7 +163,6 @@ body {
     margin-left: -16px;
     border-radius: 6px;
   }
-
 }
 
 .bullet.mBeam {

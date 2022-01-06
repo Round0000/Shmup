@@ -107,16 +107,21 @@ function fire(x) {
   setTimeout(() => {
     if (bullet.classList.contains("mBeam")) {
       bullet.style.transform = x + " " + "translateY(-320px)";
-      
+
       setTimeout(() => {
         bullet.remove();
         fireDelay = 20;
 
         if (keymap[32]) {
-          player.classList.add('chargingBeam');
+          player.classList.add("chargingBeam");
           setTimeout(() => {
-            player.classList.remove('chargingBeam');
-          }, 2000)
+            player.classList.remove("chargingBeam");
+          }, 2000);
+          setInterval(() => {
+            if (!keymap[32]) {
+              player.classList.remove("chargingBeam");
+            }
+          }, 200);
         }
       }, 400);
     } else {
@@ -157,7 +162,12 @@ setInterval(() => {
 
   currentGameSpeed =
     parseInt(document.getElementById("gameSpeedInput").value) || 3;
+
+  currentBGPos -= 0.1;
+  frame.style.backgroundPositionY = currentBGPos + "%";
 }, 100);
+
+let currentBGPos = 100;
 
 setInterval(() => {
   spawnObstacle();
@@ -211,5 +221,7 @@ document.addEventListener("keyup", (e) => {
     mHuge.checked = !mHuge.checked;
   } else if (e.code === "Digit5") {
     mFluctuate.checked = !mFluctuate.checked;
+  } else if (e.code === "Digit6") {
+    mBeam.checked = !mBeam.checked;
   }
 });
