@@ -41,6 +41,8 @@ let playerX = 0;
 
 let damageMultiplier = 1;
 
+let spawnRate = 2000;
+
 setInterval(() => {
   let bullets = document.querySelectorAll(".bullet");
   bullets.forEach((bullet) => {
@@ -66,12 +68,13 @@ setInterval(() => {
 }, 100);
 
 function fire(x) {
-  fireDelay = initialFireDelay;
+  fireDelay = document.getElementById('fireDelayInput').value || initialFireDelay;
+
 
   const bullet = document.createElement("DIV");
   const xVal = parseInt(x.split("(")[1].split("px")[0]);
 
-  const effects = document.querySelectorAll(".bulletEffects input");
+  const effects = document.querySelectorAll(".bulletEffect");
 
   effects.forEach((eff) => {
     if (eff.checked === true) {
@@ -80,6 +83,8 @@ function fire(x) {
       bullet.classList.remove(eff.id);
     }
   });
+
+  damageMultiplier = damageMultiplierInput.value || 1;
 
   bullet.classList.add("bullet");
   bullet.style.transform = x;
@@ -117,15 +122,13 @@ function spawnObstacle() {
   const o = document.createElement("DIV");
   o.classList.add("obstacle");
   o.dataset.transY = 0;
-  o.dataset.hp = getRandom(50, 100);
+  o.dataset.hp = getRandom(15, 150);
   o.innerText = o.dataset.hp;
   o.style.left = `${getRandom(0, window.innerWidth - 64)}px`;
   frame.appendChild(o);
 }
 
-setInterval(() => {
-  spawnObstacle();
-}, 1500);
+
 
 setInterval(() => {
   document.querySelectorAll(".obstacle").forEach((o) => {
@@ -138,7 +141,15 @@ setInterval(() => {
       o.remove();
     }
   });
+
+  spawnRate = parseInt(document.getElementById('spawnRateInput').value) || 2000;
+
 }, 100);
+
+setInterval(() => {
+  spawnObstacle();
+  console.log(spawnRate);
+}, spawnRate);
 
 // Keys
 let keymap = {}; // You could also use an array
